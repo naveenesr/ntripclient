@@ -1,0 +1,59 @@
+documentation for build-ntripcli
+GOAL:to check base stsaion is online or not
+
+#####################################################################
+####        OFFICIAL USAGE                             ##############
+#####################################################################
+./ntripclient -s server -u user ...
+ -m --mountpoint the requested data set or sourcetable filtering criteria
+ -s --server     the server name or address
+ -p --password   the login password
+ -r --port       the server port number (default 2101)
+ -u --user       the user name
+ -M --mode       mode for data request
+     Valid modes are:
+     1, h, http     NTRIP Version 2.0 Caster in TCP/IP mode
+     2, r, rtsp     NTRIP Version 2.0 Caster in RTSP/RTP mode
+     3, n, ntrip1   NTRIP Version 1.0 Caster
+     4, a, auto     automatic detection (default)
+     5, u, udp      NTRIP Version 2.0 Caster in UDP mode
+or using an URL:
+./ntripclient ntrip:mountpoint[/user[:password]][@[server][:port][@proxyhost[:proxyport]]][;nmea]
+
+Expert options:
+ -n --nmea       NMEA string for sending to server
+ -b --bitrate    output bitrate
+ -I --initudp    send initial UDP packet for firewall handling
+ -P --udpport    set the local UDP port
+ -S --proxyhost  proxy name or address
+ -R --proxyport  proxy port, optional (default 2101)
+
+Serial input/output:
+ -D --serdevice  serial device for output
+ -B --baud       baudrate for serial device
+ -T --stopbits   stopbits for serial device
+ -C --protocol   protocol for serial device
+ -Y --parity     parity for serial device
+ -A --databits   databits for serial device
+ -l --serlogfile logfile for serial data
+ #################################################################
+ 
+ 
+ ##################################################
+ ######### ESRSHEEP build-ntripcli.sh  ############
+ ##################################################
+
+ #!/usr/bin/sh                #set shebang
+sudo apt install git make     #install dependency packages
+git clone https://github.com/naveenesr/ntripclient ~/ntripclient #clone the nunojpg's ntripclient repo to home directory
+cd ~/ntripclient              #cd into that directory for building
+make clean                    #clean temporary build files
+make                          #start compiling/building
+sudo make install             #optional.. you can specify to install in your system or not..
+echo "~/ntripclient/ntripclient -s 3.133.81.40 -r 2101 -u sheep -p S5AkYRHC |grep 'STR;sheepbase'" | sudo tee /usr/local/bin/ntrip-status   #save your base-station's ntrip credentials to /usr/local/bin/ntrip-status script
+sudo chmod +x /usr/local/bin/ntrip-status #make the script executable
+
+#######################################################
+NOTE:after execution of build-ntripcli.sh  script we can access baseststion status using "ntrip-status"
+
+credits :@N4V33N @R4n4COdw3r @nunojpg
